@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { postUser } from './api';
-import Cookies from 'js-cookie';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { postUser } from "./api";
+import Cookies from "js-cookie";
 
 const Register = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    dni: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
+    FirstName: "",
+    LastName: "",
+    Username: "",
+    Email: "",
+    Password: "",
+    confirmPassword: "",
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
   const handleChange = (event) => {
@@ -25,62 +25,57 @@ const Register = ({ onLogin }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     if (formData.password !== formData.confirmPassword) {
       // Las contraseñas no coinciden, muestra un mensaje de error
-      setErrorMessage('Las contraseñas no coinciden');
+      setErrorMessage("Las contraseñas no coinciden");
       setShowError(true);
       return;
     }
-  
+
     try {
-      
       const response = await postUser(
         formData.firstName,
         formData.lastName,
         formData.dni,
         formData.password,
-        formData.email,
-        
-      ) ;
+        formData.email
+      );
 
       if (response.status === 200) {
-        console.log(response)
+        console.log(response);
         const user = {
           email: response.data.email,
           name: response.data.name,
           lastName: response.data.lastName,
           dni: response.data.dni,
           id: response.data.id,
-          token: response.data.token
-          };
-          
-        Cookies.set('userData', JSON.stringify(user));
+          token: response.data.token,
+        };
+
+        Cookies.set("userData", JSON.stringify(user));
         onLogin(formData.firstName, formData); // Llama a la función onLogin pasando el nombre del usuario registrado y los datos del formulario
-        navigate('/'); // Redirige al usuario a la página principal después de registrar exitosamente
+        navigate("/"); // Redirige al usuario a la página principal después de registrar exitosamente
       } else if (response.status === 400) {
-        setErrorMessage('El correo electrónico o DNI ya está en uso');
+        setErrorMessage("El correo electrónico o DNI ya está en uso");
         setShowError(true);
         return;
       } else {
-        setErrorMessage('Error al registrar el usuario');
+        setErrorMessage("Error al registrar el usuario");
       }
-    } catch(error) {
-      
-    }
-    
-  
+    } catch (error) {}
+
     // Restablece los valores y oculta el mensaje de error
-    
+
     setFormData({
-      firstName: '',
-      lastName: '',
-      dni: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
+      firstName: "",
+      lastName: "",
+      dni: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     });
-    
+
     setShowError(false);
   };
 
@@ -154,7 +149,7 @@ const Register = ({ onLogin }) => {
             onChange={handleChange}
           />
         </div>
-        {showError && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        {showError && <p style={{ color: "red" }}>{errorMessage}</p>}
         <button type="submit" className="btn btn-primary">
           Registrarse
         </button>
@@ -163,5 +158,4 @@ const Register = ({ onLogin }) => {
   );
 };
 
-export default Register;
-
+export default Register;

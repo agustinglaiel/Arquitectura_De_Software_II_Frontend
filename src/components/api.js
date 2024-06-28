@@ -5,10 +5,16 @@ const API_URL = "http://localhost:8060"; // Reemplaza con la URL de tu API de Go
 
 //Register
 
-export const postUser = async (name, LastName, DNI, Password, Email) => {
+export const postUser = async (
+  FirstName,
+  LastName,
+  Username,
+  Password,
+  Email
+) => {
   try {
     const response = await axios.post(
-      `${API_URL}/addUsuario/${name}/${LastName}/${DNI}/${Password}/${Email}`
+      `${API_URL}/addUsuario/${FirstName}/${LastName}/${Username}/${Password}/${Email}`
     );
     return response;
   } catch (error) {
