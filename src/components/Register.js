@@ -7,11 +7,11 @@ const Register = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    FirstName: "",
-    LastName: "",
-    Username: "",
-    Email: "",
-    Password: "",
+    firstName: "",
+    lastName: "",
+    userName: "",
+    email: "",
+    password: "",
     confirmPassword: "",
   });
 
@@ -37,18 +37,18 @@ const Register = ({ onLogin }) => {
       const response = await postUser(
         formData.firstName,
         formData.lastName,
-        formData.dni,
-        formData.password,
-        formData.email
+        formData.userName,
+        formData.email,
+        formData.password
       );
 
       if (response.status === 200) {
         console.log(response);
         const user = {
           email: response.data.email,
-          name: response.data.name,
+          firstName: response.data.firstName,
           lastName: response.data.lastName,
-          dni: response.data.dni,
+          userName: response.data.userName,
           id: response.data.id,
           token: response.data.token,
         };
@@ -70,7 +70,7 @@ const Register = ({ onLogin }) => {
     setFormData({
       firstName: "",
       lastName: "",
-      dni: "",
+      userName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -106,13 +106,13 @@ const Register = ({ onLogin }) => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="dni">DNI</label>
+          <label htmlFor="userName">Username</label>
           <input
             type="text"
             className="form-control"
-            id="dni"
-            name="dni"
-            value={formData.dni}
+            id="userName"
+            name="userName"
+            value={formData.userName}
             onChange={handleChange}
           />
         </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const API_URL = "http://localhost:8060"; // Reemplaza con la URL de tu API de Go
+const URL_API = "http://localhost:8060";
 
 //Register
 
@@ -14,7 +14,7 @@ export const postUser = async (
 ) => {
   try {
     const response = await axios.post(
-      `${API_URL}/addUsuario/${FirstName}/${LastName}/${Username}/${Password}/${Email}`
+      `${URL_API}/addUsuario/${FirstName}/${LastName}/${Username}/${Password}/${Email}`
     );
     return response;
   } catch (error) {
@@ -38,7 +38,7 @@ export const postUser = async (
 export const postHotel = async (name, Nroom, descr) => {
   try {
     const response = await axios.post(
-      `${API_URL}/insertHhotel/${name}/${Nroom}/${descr}`
+      `${URL_API}/insertHhotel/${name}/${Nroom}/${descr}`
     );
     return response;
   } catch (error) {
@@ -61,7 +61,7 @@ export const postHotel = async (name, Nroom, descr) => {
 export const postImage = async (image, idHotel) => {
   try {
     const response = await axios.post(
-      `${API_URL}/postImage/${image}/${idHotel}`
+      `${URL_API}/postImage/${image}/${idHotel}`
     );
     return response;
   } catch (error) {
@@ -87,7 +87,7 @@ export const loginUser = async (email, password) => {
   };
 
   try {
-    const response = await axios.post(`${API_URL}/login`, data);
+    const response = await axios.post(`${URL_API}/login`, data);
     return response;
   } catch (error) {
     if (error.response.status === 400) {
@@ -119,7 +119,7 @@ export const agregarReservation = async (
   }
   try {
     const response = await axios.post(
-      `${API_URL}/usuario/agregarReservation/${idHotel}/${inicio}/${final}/${habitacion}`
+      `${URL_API}/usuario/agregarReservation/${idHotel}/${inicio}/${final}/${habitacion}`
     );
     return response;
   } catch (error) {
@@ -136,7 +136,7 @@ export const disponibilidadDeReserva = async (
 ) => {
   try {
     const response = await axios.get(
-      `${API_URL}/disponibilidadDeReserva/${idHotel}/${inicio}/${final}/${habitacion}`
+      `${URL_API}/disponibilidadDeReserva/${idHotel}/${inicio}/${final}/${habitacion}`
     );
     if (response.status === 200 || response.status === 201) {
       try {
@@ -164,7 +164,7 @@ export const getUsers = async () => {
     const user = JSON.parse(userData);
 
     axios.defaults.headers.common["Authorization"] = user.token;
-    const response = await axios.get(`${API_URL}/admin/users`);
+    const response = await axios.get(`${URL_API}/admin/users`);
     return response;
   } catch (error) {
     console.error("Error al obtener los usuarios:", error);
@@ -181,7 +181,7 @@ export const getHotels = async () => {
     console.log("Usuario no regsitrado");
   }
   try {
-    const response = await axios.get(`${API_URL}/hotels`);
+    const response = await axios.get(`${URL_API}/hotels`);
     return response;
   } catch (error) {
     console.error("Error al obtener los usuarios:", error);
@@ -190,7 +190,7 @@ export const getHotels = async () => {
 
 export const getHotelById = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/hotelId/${id}`);
+    const response = await axios.get(`${URL_API}/hotelId/${id}`);
     return response;
   } catch (error) {
     console.error("Error al obtener los usuarios:", error);
@@ -204,7 +204,7 @@ export const getReservations = async () => {
 
     axios.defaults.headers.common["Authorization"] = user.token;
 
-    const response = await axios.get(`${API_URL}/admin/reservas`);
+    const response = await axios.get(`${URL_API}/admin/reservas`);
     return response;
   } catch (error) {
     console.error("Error al obtener los usuarios:", error);
@@ -220,7 +220,7 @@ export const getReservationsByUser = async () => {
     const id = user.id;
 
     const response = await axios.get(
-      `${API_URL}/usuario/reservaByUserId/${id}`
+      `${URL_API}/usuario/reservaByUserId/${id}`
     );
     console.log(response.data);
     return response;
@@ -232,7 +232,7 @@ export const getReservationsByUser = async () => {
 export const getImagesByHotelId = async (idHotel) => {
   try {
     const response = await axios.get(
-      `${API_URL}/getImagesByHotelId/${idHotel}`
+      `${URL_API}/getImagesByHotelId/${idHotel}`
     );
     return response;
   } catch (error) {
@@ -259,7 +259,7 @@ export const InsertHotel = async (data) => {
 
     axios.defaults.headers.common["Authorization"] = user.token;
 
-    const response = await axios.post(`${API_URL}admin/InsertHotel`, data, {
+    const response = await axios.post(`${URL_API}admin/InsertHotel`, data, {
       headers: {
         "Content-Type": "application/json",
         // Otros encabezados si es necesario
@@ -279,7 +279,7 @@ export const tipoHabitaciones = async () => {
     const user = JSON.parse(userData);
 
     axios.defaults.headers.common["Authorization"] = user.token;
-    const response = await axios.get(`${API_URL}/admin/Habitaciones`);
+    const response = await axios.get(`${URL_API}/admin/Habitaciones`);
     return response;
   } catch (error) {
     console.error("Error al obtener los usuarios:", error);
@@ -288,7 +288,7 @@ export const tipoHabitaciones = async () => {
 
 export const getAmenities = async () => {
   try {
-    const response = await axios.get(`${API_URL}/getAmenities`);
+    const response = await axios.get(`${URL_API}/getAmenities`);
     return response;
   } catch (error) {
     console.error("Error al obtener los usuarios:", error);
