@@ -42,7 +42,7 @@ const Register = ({ onLogin }) => {
         formData.password
       );
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         console.log(response);
         const user = {
           email: response.data.email,
