@@ -7,18 +7,21 @@ const URL_API_USER = "http://localhost:8060";
 
 //Register
 
-export const postUser = async (FirstName, LastName, Username, Password, Email) => {
+export const postUser = async (
+  FirstName,
+  LastName,
+  Username,
+  Email,
+  Password
+) => {
   try {
-    const response = await axios.post(
-      `${URL_API_USER}/users/register`, 
-      {
-        first_name: FirstName,
-        last_name: LastName,
-        username: Username,
-        password: Password,
-        email: Email
-      }
-    );
+    const response = await axios.post(`${URL_API_USER}/register`, {
+      first_name: FirstName,
+      last_name: LastName,
+      username: Username,
+      email: Email,
+      password: Password,
+    });
     return response;
   } catch (error) {
     if (error.response.status === 400) {
@@ -32,8 +35,8 @@ export const postUser = async (FirstName, LastName, Username, Password, Email) =
       console.error("Error en la solicitud:", error.message);
     }
   }
-  
-  throw new Error('Error al registrar el usuario');
+
+  throw new Error("Error al registrar el usuario");
 };
 
 //Hotel
@@ -83,9 +86,9 @@ export const postImage = async (image, idHotel) => {
   throw new Error("Error al agregar imagenes");
 };
 
-export const loginUser = async (email, password) => {
+export const loginUser = async (username, password) => {
   const data = {
-    email: email,
+    username: username,
     password: password,
   };
 
@@ -261,12 +264,16 @@ export const InsertHotel = async (data) => {
 
     axios.defaults.headers.common["Authorization"] = user.token;
 
-    const response = await axios.post(`${URL_API_USER}admin/InsertHotel`, data, {
-      headers: {
-        "Content-Type": "application/json",
-        // Otros encabezados si es necesario
-      },
-    });
+    const response = await axios.post(
+      `${URL_API_USER}admin/InsertHotel`,
+      data,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          // Otros encabezados si es necesario
+        },
+      }
+    );
 
     return response.data; // Retorna los datos de la respuesta
   } catch (error) {

@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { loginUser } from './api';
-import Cookies from 'js-cookie';
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { loginUser } from "./api";
+import Cookies from "js-cookie";
 
 const LogIn = ({ onLogin }) => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    username: "",
+    password: "",
   });
 
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
   const handleChange = (event) => {
@@ -21,37 +21,34 @@ const LogIn = ({ onLogin }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
-      const response = await loginUser(formData.email, formData.password);
+      const response = await loginUser(formData.username, formData.password);
       if (response.status === 200) {
         const user = {
-          email: response.data.email,
-          name: response.data.name,
+          username: response.data.username,
+          firstName: response.data.firstName,
           lastName: response.data.lastName,
-          dni: response.data.dni,
           id: response.data.id,
           admin: response.data.admin,
-          token: response.data.token
+          token: response.data.token,
         };
-        console.log(response)
+        console.log(response);
 
-        Cookies.set('userData', JSON.stringify(user));
+        Cookies.set("userData", JSON.stringify(user));
         onLogin(formData.firstName, formData);
         navigate("/");
-     
       } else if (response.status === 400) {
-        setErrorMessage('El usuario no existe o la contraseña es incorrecta');
+        setErrorMessage("El usuario no existe o la contraseña es incorrecta");
         setShowError(true);
-      } else{
-        setErrorMessage('Error al iniciar sesión');
+      } else {
+        setErrorMessage("Error al iniciar sesión");
         setShowError(true);
-      }  
-        
-      } catch (error) {
-        setErrorMessage('Error al iniciar sesión');
-        setShowError(true);
-        console.error(error);
+      }
+    } catch (error) {
+      setErrorMessage("Error al iniciar sesión");
+      setShowError(true);
+      console.error(error);
     }
   };
 
@@ -60,13 +57,13 @@ const LogIn = ({ onLogin }) => {
       <h1 id="h1">Log In</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="username">Username</label>
           <input
-            type="email"
+            type="username"
             className="form-control"
-            id="email"
-            name="email"
-            value={formData.email}
+            id="username"
+            name="username"
+            value={formData.username}
             onChange={handleChange}
           />
         </div>
@@ -81,14 +78,14 @@ const LogIn = ({ onLogin }) => {
             onChange={handleChange}
           />
         </div>
-        {showError && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        {showError && <p style={{ color: "red" }}>{errorMessage}</p>}
         <button type="submit" className="btn btn-primary">
           Iniciar sesión
         </button>
       </form>
-      <p style={{ color: 'gray', marginTop: '10px' }}>
-        ¿No tienes cuenta?{' '}
-        <Link to="/registro" style={{ textDecoration: 'underline' }}>
+      <p style={{ color: "gray", marginTop: "10px" }}>
+        ¿No tienes cuenta?{" "}
+        <Link to="/registro" style={{ textDecoration: "underline" }}>
           Regístrate
         </Link>
       </p>
