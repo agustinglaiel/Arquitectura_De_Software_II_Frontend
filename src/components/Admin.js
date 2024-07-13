@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { loginUser, getUsers, getReservations, getHotels } from './api';
+import { loginUser, getUsers, getReservations, getHotels ,isAdmin} from './api';
 import Cookies from 'js-cookie';
 import '../styles/Admin.css';
 
@@ -21,9 +21,11 @@ const Admin = () => {
     email: '',
     password: '',
   });
-
+  
   useEffect(() => {
     try {
+      const status = isAdmin(Cookies.get("token"))
+      
       const userData = Cookies.get('userData');
       const user = JSON.parse(userData);
       if (user.admin === 1) {
@@ -46,15 +48,16 @@ const Admin = () => {
     event.preventDefault();
     try {
       const response = await loginUser(formData.email, formData.password);
+      console.log(response.data)
       if (response.status === 200) {
         const user = {
-          email: response.data.email,
-          name: response.data.name,
-          lastName: response.data.lastName,
-          dni: response.data.dni,
-          id: response.data.id,
-          admin: response.data.admin,
-          token: response.data.token
+          email: response.data.token.email,
+          name: response.data.token.name,
+          lastName: response.data.token.last_name,
+          username: response.data.token.username,
+          id: response.data.token.id,
+          admin: 1,
+          token: response.data.token.token
         };
 
         console.log(user)

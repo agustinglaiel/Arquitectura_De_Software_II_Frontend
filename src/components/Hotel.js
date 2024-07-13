@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button ,Carousel, Card} from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { getHotelById, getImagesByHotelIdMap, agregarReservation } from './api';
+import { getHotelById, getImagesByHotelId, agregarReservation } from './api';
 import { useNavigate } from 'react-router-dom';
 
 function HotelDetail() {
@@ -25,8 +25,10 @@ function HotelDetail() {
 
   const getImagenes = async () => {
     try {
-      const response2 = await getImagesByHotelIdMap(id);
-      const imgData = response2.map(image =>
+      const response2 = await getImagesByHotelId(id);
+      const nose = response2.data.images
+      console.log(nose)
+      const imgData = nose.map(image =>
         new Uint8Array(atob(image.Data).split('').map(char => char.charCodeAt(0)))
       );
       setImagenes(imgData);
@@ -128,7 +130,7 @@ function HotelDetail() {
               {hotel.amenities.map((amenity, index) => (
                 <Card key={index} className="m-2" style={{ width: '12rem' }}>
                   <Card.Body>
-                    <Card.Text>{amenity.name}</Card.Text>
+                    <Card.Text>{amenity}</Card.Text>
                   </Card.Body>
                 </Card>
               ))}

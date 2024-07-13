@@ -106,7 +106,7 @@ function Reservation() {
   const getHoteles = async () => {
     try {
       const response = await getHotels();
-      const reservasData = response.data.hotels;
+      const reservasData = response.data;
       setHoteles(reservasData);
     } catch (error) {
       console.error('Error al obtener hoteles:', error);

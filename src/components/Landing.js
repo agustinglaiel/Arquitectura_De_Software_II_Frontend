@@ -10,14 +10,18 @@ function Landing() {
   const getHoteles = async () => {
     try {
       const response = await getHotels();
-      const hotelsData = response.data.hotels;
+      
+      const hotelsData = response.data;
+      console.log(response.data)
       const promises = [];
   
       for (const hotel of hotelsData) {
         promises.push(
           getImagesByHotelId(hotel.id)
             .then((response2) => {
+            
               const imagesData = response2.data.images[0].Data;
+              hotel.image=new Uint8Array(atob(imagesData).split('').map(char => char.charCodeAt(0)));
               return new Uint8Array(atob(imagesData).split('').map(char => char.charCodeAt(0)));
             })
             .catch((error) => {
@@ -45,10 +49,10 @@ function Landing() {
   <Carousel>
     {hoteles.map((hotel) => (
       <Carousel.Item key={hotel.id} value={hotel.id}>
-        {imagenes[hotel.id-1] ? (
+        {hotel.image ? (
           <img
             className="d-block w-100"
-            src={`data:image/jpeg;base64,${btoa(String.fromCharCode.apply(null, imagenes[hotel.id-1]))}`}
+            src={`data:image/jpeg;base64,${btoa(String.fromCharCode.apply(null, hotel.image))}`}
             alt={`Imagen de ${hotel.name}`}
             style={{ objectFit: 'cover', height: '100%', maxHeight: '500px' }}
           />
