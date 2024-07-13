@@ -3,41 +3,46 @@ import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { getImagesByHotelId, getHotels } from './api';
 
 function List() {
-    const [hoteles, setHoteles] = useState([]);
-    const [imagenes, setImagenes] = useState([]);
+  const [hoteles, setHoteles] = useState([]);
+  const [imagenes, setImagenes] = useState([]);
+
+  const getHoteles = async () => {
+    try {
+      const response = await getHotels();
+      
+      const hotelsData = response.data;
+      console.log(response.data)
+      const promises = [];
   
-    const getHoteles = async () => {
-      try {
-        const response = await getHotels();
-        const hotelsData = response.data.hotels;
-        const promises = [];
-    
-        for (const hotel of hotelsData) {
-          promises.push(
-            getImagesByHotelId(hotel.id)
-              .then((response2) => {
-                const imagesData = response2.data.images[0].Data;
-                return new Uint8Array(atob(imagesData).split('').map(char => char.charCodeAt(0)));
-              })
-              .catch((error) => {
-                console.error('Error al obtener imágenes por hotel:', error);
-                return null;
-              })
-          );
-        }
-    
-        const imagesArray = await Promise.all(promises);
-    
-        setImagenes(imagesArray.filter(image => image !== null));
-        setHoteles(hotelsData);
-      } catch (error) {
-        console.error('Error al obtener hoteles:', error);
+      for (const hotel of hotelsData) {
+        promises.push(
+          getImagesByHotelId(hotel.id)
+            .then((response2) => {
+            
+              const imagesData = response2.data.images[0].Data;
+              hotel.image=new Uint8Array(atob(imagesData).split('').map(char => char.charCodeAt(0)));
+              return new Uint8Array(atob(imagesData).split('').map(char => char.charCodeAt(0)));
+            })
+            .catch((error) => {
+              console.error('Error al obtener imágenes por hotel:', error);
+              return null; // O maneja el error de alguna manera
+            })
+        );
       }
-    };
   
-    useEffect(() => {
-      getHoteles();
-    }, []);
+      const imagesArray = await Promise.all(promises);
+  
+      console.log(imagesArray);
+      setImagenes(imagesArray.filter(image => image !== null));
+      setHoteles(hotelsData);
+    } catch (error) {
+      console.error('Error al obtener hoteles:', error);
+    }
+  };
+
+  useEffect(() => {
+    getHoteles();
+  }, []);
   
     return (
       <Container className="mt-5">
@@ -49,7 +54,7 @@ function List() {
                 <Row className="no-gutters">
                   <Col md={4}>
                     <Card.Img
-                      src={`data:image/jpeg;base64,${btoa(String.fromCharCode.apply(null, imagenes[index]))}`}
+                      src={`data:image/jpeg;base64,${btoa(String.fromCharCode.apply(null, hotel.image))}`}
                       alt={`Imagen de ${hotel.name}`}
                       className="img-fluid"
                     />
