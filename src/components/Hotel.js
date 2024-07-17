@@ -43,7 +43,7 @@ function HotelDetail() {
   }, [id]);
 
   useEffect(() => {
-    if (startDate !== undefined && finalDate !== undefined && idHabitacion !== undefined) {
+    if (startDate !== undefined && finalDate !== undefined ) {
       try{
         for(let i =0;i<hotel.habitaciones.length;i++){
           console.log(hotel.habitaciones[i].Id.toString())
@@ -70,8 +70,8 @@ function HotelDetail() {
       const response = await agregarReservation(
         id,
         startDate,
-        finalDate,
-        idHabitacion,
+        finalDate
+        
       );
      
       if (response.status === 200 || response.status === 201) {

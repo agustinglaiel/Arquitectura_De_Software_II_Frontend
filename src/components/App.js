@@ -28,6 +28,7 @@ function App() {
     const userDataCookie = Cookies.get('userData');
     if (userDataCookie) {
       const user = JSON.parse(userDataCookie);
+      console.log(user)
       setIsLoggedIn(true);
       setUserData(user);
     }
@@ -90,7 +91,7 @@ function App() {
         <div className="container mt-5">
           <Routes>
             <Route path="/" element={<Landing/>}/>
-            <Route path="/list" element={<List/>}/>
+            <Route path="/list/:ciudad/:startDate/:finalDate" element={<List/>}/>
             <Route path="/micuenta" element={<MiCuenta usuario={userData} />}/>
             <Route path="/registro" element={<Register onLogin={handleLogin} />}/>
             <Route path="/login" element={<LogIn onLogin={handleLogin} />} />
@@ -99,7 +100,7 @@ function App() {
             <Route path="/admin/crearHotel" element={<CreateHotel />} />
             <Route path="/admin/crearHotel/imagenes" element={<AddImages/>}/>
             <Route path="/hotel/:id" element={<Hotel/>}/>
-            <Route path="/hotel/:id/:startDate/:finalDate/:idHabitacion" element={<Hotel/>}/>
+            <Route path="/hotel/:id/:startDate/:finalDate" element={<Hotel/>}/>
           </Routes>
         </div>
         <Footer />

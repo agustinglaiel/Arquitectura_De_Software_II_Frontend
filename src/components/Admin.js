@@ -25,9 +25,9 @@ const Admin = () => {
   useEffect(() => {
     try {
       const status = isAdmin(Cookies.get("token"))
-      
       const userData = Cookies.get('userData');
       const user = JSON.parse(userData);
+      
       if (user.admin === 1) {
         setShowLogin(false);
         setShowOption(true);

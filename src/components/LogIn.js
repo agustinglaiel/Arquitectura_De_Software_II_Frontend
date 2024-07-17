@@ -26,15 +26,14 @@ const LogIn = ({ onLogin }) => {
       const response = await loginUser(formData.username, formData.password);
       if (response.status === 200) {
         const user = {
-          username: response.data.username,
-          firstName: response.data.firstName,
-          lastName: response.data.lastName,
-          id: response.data.id,
-          admin: response.data.admin,
-          token: response.data.token,
+          email: response.data.token.email,
+          name: response.data.token.name,
+          lastName: response.data.token.last_name,
+          username: response.data.token.username,
+          admin: 1,
+          token: response.data.token.token
         };
-        console.log(response);
-
+        
         Cookies.set("userData", JSON.stringify(user));
         onLogin(formData.firstName, formData);
         navigate("/");

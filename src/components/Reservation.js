@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getHotels } from './api';
-import { disponibilidadDeReserva } from './api';
+import { getHotels,disponibilidadDeReserva ,getCities} from './api';
 
 function Reservation() {
 
-  const [hoteles, setHoteles] = useState([]);
+  const [cities, setCities] = useState([]);
   const [formData, setFormData] = useState({
     option1: '',
     startDate: '',
@@ -16,6 +15,7 @@ function Reservation() {
 
   const navigate = useNavigate();
 
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevFormData) => ({ ...prevFormData, [name]: value }));
@@ -27,28 +27,27 @@ function Reservation() {
       if(formData.option1===""){
         setErrorMessage('Selecciona una Ciudad');
         setShowError(true);
-        setHoteles([])
-
-        getHoteles();
-
+        setCities([])
+        GetCities()
         return
       }
       if(formData.startDate===""){
         setErrorMessage('Selecciona fecha inicial');
         setShowError(true);
-        setHoteles([])
-        getHoteles();
+        setCities([])
+        GetCities();
 
         return
       }
       if(formData.endDate===""){
         setErrorMessage('Selecciona fecha final');
         setShowError(true);
-        setHoteles([])
-        getHoteles();
+        setCities([])
+        GetCities();
         return
       }
-      
+      navigate(`/list/${formData.option1}/${formData.startDate}/${formData.endDate}`);
+      /*
       const response = await disponibilidadDeReserva(
         formData.option1,
         formData.startDate,
@@ -56,47 +55,46 @@ function Reservation() {
       );
       
       if (response.status === 200 || response.status === 201) {
-        navigate(`/busqueda/${formData.option1}`);
+        
       }else if(response.status === 501){
         navigate(`/registro`);
 
       }else if (response.status===400) {
         setErrorMessage(`${response.data.message}`);
         setShowError(true);
-        setHoteles([])
-        getHoteles();
+        setCities([])
+        GetCities();
       }else{
-        setHoteles([])
-        getHoteles();
+        setCities([])
+        GetCities();
         setErrorMessage(`Algo salio mal`);
         setShowError(true);
         
       }
+      */
     } catch (error) {
       console.error('Error al realizar la reserva:', error);
-      setHoteles([])
-      getHoteles();
+      setCities([])
+      GetCities();
       setErrorMessage('Algo salió mal');
       setShowError(true);
     }
   };
 
-  const getHoteles = async () => {
+  const GetCities = async () => {
     try {
-      const response = await getHotels();
-      const reservasData = response.data;
-      setHoteles(reservasData);
+      const response = await getCities();
+      setCities(response.data)
     } catch (error) {
       console.error('Error al obtener hoteles:', error);
     }
   };
 
   useEffect(() => {
-    getHoteles();
+    GetCities();
   }, []);
 
 
-  
 
   return (
     <div className="container mt-5">
@@ -114,9 +112,9 @@ function Reservation() {
                 name="option1"
               >
                 <option value="0">Seleccionar el lugar de su estadía</option>
-                {hoteles.map((hotel) => (
-                  <option key={hotel.id} value={hotel.id}>
-                    {hotel.name}
+                {cities.map((cities) => (
+                  <option key={cities} value={cities}>
+                    {cities}
                   </option>
                 ))}
               </select>
@@ -154,7 +152,7 @@ function Reservation() {
 
         {showError && <p style={{ color: 'red' }}>{errorMessage}</p>}
         <button type="submit" className="btn btn-primary">
-          Reservar
+          Buscar
         </button>
       </form>
     </div>

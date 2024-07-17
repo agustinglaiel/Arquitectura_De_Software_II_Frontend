@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const URL_API_USER = "http://localhost:8060";
-// const URL_API_BUSQ = "http://localhost:8070";
+ const URL_API_SEAR = "http://localhost:8070";
  const URL_API_FICH = "http://localhost:8080";
 
 //Register
@@ -127,6 +127,8 @@ export const isAdmin=async(token) =>{
     }
   
 } 
+
+
 //Reservation
 export const agregarReservation = async (
   idHotel,
@@ -153,14 +155,13 @@ export const agregarReservation = async (
 
 //Dispponibilidad de reservas
 export const disponibilidadDeReserva = async (
-  idHotel,
   inicio,
   final,
-  habitacion
+  idHotel
 ) => {
   try {
     const response = await axios.get(
-      `${URL_API_USER}/disponibilidadDeReserva/${idHotel}/${inicio}/${final}/${habitacion}`
+      `${URL_API_USER}/reserva/${inicio}/${final}/${idHotel}`
     );
     if (response.status === 200 || response.status === 201) {
       try {
@@ -193,6 +194,28 @@ export const getUsers = async () => {
     console.error("Error al obtener los usuarios:", error);
   }
 };
+
+export const getCities = async () => {
+  try {
+    const response = await axios.get(`${URL_API_SEAR}/ciudades`);
+    console.log("si me llama el get cities")
+    return response;
+  } catch (error) {
+    console.error("Error al obtener las ciudades", error);
+  }
+};
+
+
+export const querySolrCiudad = async(ciudad)=> {
+  try {
+    const response = await axios.get(`${URL_API_SEAR}/busqueda_hotel_api/search=city_${ciudad}`);
+    return response
+}catch(response){
+  console.log("No ciudad");
+}
+
+}
+
 
 //GetHotels
 export const getHotels = async () => {
